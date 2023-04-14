@@ -51,24 +51,14 @@ So, this regular expression can be used to match an HTML tag with its attributes
 In this case, the opening tag <div id="my-div"> will be matched by the regular expression, with "div" captured in group 1, "class="div1"" captured in group 2, and "This is some text inside a div." captured in group 3.
 
 
-
 ### Anchors
 
 Anchors are special characters that will match a pattern only if it appears at a specific position in the input string. There are two types of anchors, the caret (^) anchor which matches the beginning of a line or string, and the dollar sign anchor ($) for matching the end of a line or string.<br>
 
 The use of ^ here in the above Regex matches the beginning of the string and then searches for the literal character <, the beginning of any html tag.<br>
 
-The use of $ here is meant to 
+The use of $ at the very end here is meant to match the end of the string, indicating the previous pattern (end tag).<br>
 
-```
-
-The caret anchor: (^) - This matches the beginning of a line or string. When used at the beginning of a regular expression, it indicates that the pattern must appear at the beginning of the input string. When used inside a character class, it negates the match so that the pattern matches any character that is not in the character class.
-
-
-
-The dollar sign anchor ($) - This is called the "dollar anchor", and it matches the end of a line or string. When used at the end of a regular expression, it indicates that the pattern must appear at the end of the input string.
-
-For example, the regular expression "^hello" matches any string that begins with the word "hello". The regular expression "world$" matches any string that ends with the word "world". These anchors are useful for specifying the position of the pattern within the input string, and they are commonly used in text processing and search operations.
 
 ### Quantifiers
 
@@ -99,53 +89,42 @@ This uses the + quantifier twice - one or more characters need to match in the p
 
 ```
 
-The ? is here to match either 0 or 1 occurrence of the preceding character/group, either the contents of the HTML tag or a self-closing tag.
+The ? is here to match either 0 or 1 occurrence of the preceding character/group, either the contents of the HTML tag or a self-closing tag.<br>
 
+Finally the first * matches zero or more characters that are not "<", followed by any number of repetitions of this pattern.<br>
+
+```
+>(.*)<\/\1>
+```
+
+The above uses * in matching the ">" character followed by any number of characters (including newlines) until a closing tag "</" with the same name as the opening tag (captured in group 1) is found, followed by a ">". The contents of the tag are captured in group 2.
 
 
 ### OR Operator
 
-In regular expressions, the OR operator is denoted by the pipe character (|). It is also known as the alternation operator.
+The OR operator is written as (|). It allows multiple alternative patterns to equally match, such as this|that, "this or that."<br>
 
-The OR operator allows you to specify multiple alternative patterns that can match a given input string. For example, the regular expression "cat|dog" matches either the word "cat" or the word "dog".
+```
+(?:>(.*)<\/\1>|\s+\/>)
+```
 
-You can also use parentheses to group alternative patterns together. For example, the regular expression "(cat|dog)food" matches either "catfood" or "dogfood".
-
-The OR operator is useful when you want to match a pattern that can have multiple variations or when you want to match any one of several possible patterns.
+It's used her to match either the contents of the HTML tag or a self-closing tag.
 
 ### Character Classes
 
-In regular expressions, a character class is a way of defining a set of characters that can be matched by a single pattern. Character classes are denoted by enclosing a set of characters within square brackets ([]).
+Enclosing a set of characters within square brackets ([]) allows that set of characters to define a pattern.<br>
 
-For example, the regular expression "[aeiou]" matches any one of the five vowels. This character class matches any string that contains at least one vowel.
 
-You can also use character ranges within a character class to match a range of characters. For example, the regular expression "[a-z]" matches any lowercase letter from "a" to "z", while the regular expression "[A-Z]" matches any uppercase letter from "A" to "Z".
+```[a-z]```
 
-You can use negation within a character class to match any character that is not in the class. This is denoted by a caret (^) character at the beginning of the character class. For example, the regular expression "[^aeiou]" matches any character that is not a vowel.
-
-Character classes are very useful for matching specific sets of characters and can be used to create more complex regular expressions.
+Here, "[a-z]" matches any lowercase letter from "a" to "z" between the "<" and the following space or ">" character. This defines the HTML tag.
 
 ### Flags
 
-In regular expressions, flags are optional parameters that modify the behavior of a pattern match. Flags are denoted by one or more letters placed after the final delimiter of a regular expression.
+Flags modify the behavior of a pattern match. Flags will have one or more letters placed after the final delimiter of a regular expression.<br>
 
-There are several flags available in most regex flavors. Some of the most common flags are:
+Some flags and what they indicate are i (case-insensitive), g (global), m (multiline), s (dotall), u (unicode), y (sticky). Flags can be used individually or in combination with other flags.
 
-i (case-insensitive) - Allows the pattern match to be case-insensitive. For example, the regular expression /hello/i would match the strings "hello", "Hello", and "HELLO".
-
-g (global) - Allows the pattern match to be applied globally, matching all occurrences in the input string rather than just the first.
-
-m (multiline) - Allows the pattern match to be applied across multiple lines. This changes the behavior of the ^ and $ anchors to match the beginning and end of each line, rather than the beginning and end of the entire input string.
-
-s (dotall) - Allows the . metacharacter to match any character, including newline characters.
-
-u (unicode) - Enables support for matching Unicode characters.
-
-y (sticky) - Only matches at the start of the string and at the position immediately following the previous match.
-
-Flags can be used individually or in combination with other flags. For example, the regular expression /hello/gi would match all occurrences of "hello" in a case-insensitive manner.
-
-Flags are a powerful feature of regular expressions that allow you to customize and fine-tune your pattern matches.
 
 ### Grouping and Capturing
 
@@ -163,21 +142,16 @@ All examples can be found throughout this particular Regex. Consider: <br>
 (?:>(.*)<\/\1>|\s+\/>)
 ```
 
-The first two are captured groups while the final group is non-capturing, given that it begins with a ?.
+The first two are captured groups while the final group is non-capturing, given that it begins with a ?.<br>
 
-For example, the regular expression (ab)+ matches one or more occurrences of the sequence "ab". The grouping allows the + quantifier to apply to the entire sequence, rather than just the final "b".
-
-Capturing is the process of using parentheses to create a capturing group that remembers the part of the input string that matched the group. This is useful when you want to extract specific parts of a matched string for further processing. Capturing groups are numbered starting from 1, based on the order in which they appear in the pattern.
-
-For example, the regular expression (\d{3})-(\d{2})-(\d{4}) matches a social security number in the format XXX-XX-XXXX. The three groups (\d{3}), (\d{2}), and (\d{4}) capture the three parts of the number, allowing you to extract them separately.
-
-Capturing groups can be accessed using special variables or functions provided by the programming language or tool that you are using with regular expressions. The details of how to access capturing groups vary depending on the specific implementation.
 
 ### Bracket Expressions
 
-In regular expressions, bracket expressions are a way of defining a set of characters that can be matched by a single pattern. They are similar to character classes, but provide more flexibility in specifying the set of characters to be matched.
+Bracket expressions define a set of characters that can be matched by a single pattern. They are similar to character classes but provide more flexibility in specifying the set of characters that will be matched.<br>
 
-Bracket expressions are denoted by enclosing a set of characters or character ranges within square brackets ([]). For example, the regular expression [abc] matches any one of the three characters "a", "b", or "c".
+Bracket expressions are denoted by enclosing a set of characters or character ranges within square brackets ([]).<br>
+
+ <!-- For example, the regular expression [abc] matches any one of the three characters "a", "b", or "c". -->
 
 You can also use character ranges within a bracket expression to match a range of characters. For example, the regular expression [a-z] matches any lowercase letter from "a" to "z", while the regular expression [A-Z] matches any uppercase letter from "A" to "Z".
 
@@ -214,9 +188,11 @@ In general, it's a good practice to use lazy matches only when you specifically 
 
 ### Boundaries
 
-In regular expressions, boundaries are special characters that match the position between characters, rather than the characters themselves. They allow you to specify where a match should occur in relation to other characters in the input string.
+Boundaries are special characters that match the position **between** characters, rather than the characters themselves. They allow you to specify where a match should occur in relation to other characters in the input string.<br>
 
-There are several different types of boundaries in regular expressions:
+There types of boundaries in regular expressions are word boundaries (/b) and line boundaries (^ and $).
+
+
 
 Word boundaries: \b
 Word boundaries match the position between a word character (as defined by the \w character class) and a non-word character. For example, the regular expression \bcat\b would match the word "cat" only when it appears on its own, and not as part of another word like "scattered" or "category".
