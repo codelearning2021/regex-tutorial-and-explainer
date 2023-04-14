@@ -1,4 +1,4 @@
-# Title (replace with your title)
+# Regional Expression for HTML Tag Validation
 
 Introductory paragraph (replace this with your text)
 
@@ -17,7 +17,6 @@ The purpose of the regex here used for this document as an example checks and va
 
 - [Anchors](#anchors)
 - [Quantifiers](#quantifiers)
-
 - [OR Operator](#or-operator)
 - [Character Classes](#character-classes)
 - [Flags](#flags)
@@ -26,34 +25,33 @@ The purpose of the regex here used for this document as an example checks and va
 - [Greedy and Lazy Match](#greedy-and-lazy-match)
 - [Boundaries](#boundaries)
 - [Back-references](#back-references)
-
 - [Look-ahead and Look-behind](#look-ahead-and-look-behind)
 
 
 ## Regex Components
 
-^ - matches the beginning of the string.
-< - matches a literal "<" character.
-([a-z]+) - captures one or more lowercase letters between the "<" and the following space or ">" character. This represents the name of the HTML tag.
-([^<]+)* - matches zero or more characters that are not "<", followed by any number of repetitions of this pattern. This represents the attributes of the HTML tag.
-(?:>(.*)<\/\1>|\s+\/>) - matches either the contents of the HTML tag or a self-closing tag. This is a non-capturing group, denoted by the "(?:...)" syntax. It contains two alternatives separated by the "|" character:
->(.*)<\/\1> - matches the ">" character followed by any number of characters (including newlines) until a closing tag "</" with the same name as the opening tag (captured in group 1) is found, followed by a ">". The contents of the tag are captured in group 2.
-\s+\/> - matches one or more whitespace characters followed by a "/>" character, representing a self-closing tag.
-$ - matches the end of the string.
+^ - matches the beginning of the string.<br>
+< - matches a literal "<" character.<br>
+([a-z]+) - captures one or more lowercase letters between the "<" and the following space or ">" character. This represents the name of the HTML tag.<br>
+([^<]+)* - matches zero or more characters that are not "<", followed by any number of repetitions of this pattern. This represents the attributes of the HTML tag.<br>
+(?:>(.*)<\/\1>|\s+\/>) - matches either the contents of the HTML tag or a self-closing tag. This is a non-capturing group, denoted by the "(?:...)" syntax. It contains two alternatives separated by the "|" character:<br>
+    >(.*)<\/\1> - matches the ">" character followed by any number of characters (including newlines) until a closing tag "</" with the same name as the opening tag (captured in group 1) is found, followed by a ">". The contents of the tag are captured in group 2.
+    \s+\/> - matches one or more whitespace characters followed by a "/>" character, representing a self-closing tag.
+$ - matches the end of the string.<br>
 So, this regular expression can be used to match an HTML tag with its attributes and contents. For example, it can match the following string:
 
-'''
+```
 <div class="gist1">
   Here is the actual textual content.
 </div>
-'''
+```
 
-In this case, the opening tag <div id="my-div"> will be matched by the regular expression, with "div" captured in group 1, "class="div1"" captured in group 2, and "This is some text inside a div." captured in group 3.
+In this case, the opening tag ```<div id="my-div">``` will be matched by the regular expression, with "div" captured in group 1, "class="div1"" captured in group 2, and "This is some text inside a div." captured in group 3.<br>
 
 
 ### Anchors
 
-Anchors are special characters that will match a pattern only if it appears at a specific position in the input string. There are two types of anchors, the caret (^) anchor which matches the beginning of a line or string, and the dollar sign anchor ($) for matching the end of a line or string.<br>
+Anchors are special characters that will match a pattern **only** if it appears at a specific position in the input string. There are two types of anchors, the caret (^) anchor which matches the beginning of a line or string, and the dollar sign anchor ($) for matching the end of a line or string.<br>
 
 The use of ^ here in the above Regex matches the beginning of the string and then searches for the literal character <, the beginning of any html tag.<br>
 
@@ -97,7 +95,7 @@ Finally the first * matches zero or more characters that are not "<", followed b
 >(.*)<\/\1>
 ```
 
-The above uses * in matching the ">" character followed by any number of characters (including newlines) until a closing tag "</" with the same name as the opening tag (captured in group 1) is found, followed by a ">". The contents of the tag are captured in group 2.
+The above uses * in matching the ">" character followed by any number of characters (including newlines) until a closing tag "</" with the same name as the opening tag (captured in group 1) is found, followed by a ">". The contents of the tag are captured in group 2.<br>
 
 
 ### OR Operator
@@ -108,7 +106,7 @@ The OR operator is written as (|). It allows multiple alternative patterns to eq
 (?:>(.*)<\/\1>|\s+\/>)
 ```
 
-It's used her to match either the contents of the HTML tag or a self-closing tag.
+It's used her to match either the contents of the HTML tag or a self-closing tag.<br>
 
 ### Character Classes
 
@@ -117,7 +115,7 @@ Enclosing a set of characters within square brackets ([]) allows that set of cha
 
 ```[a-z]```
 
-Here, "[a-z]" matches any lowercase letter from "a" to "z" between the "<" and the following space or ">" character. This defines the HTML tag.
+Here, "[a-z]" matches any lowercase letter from "a" to "z" between the "<" and the following space or ">" character. This defines the HTML tag.<br>
 
 ### Flags
 
@@ -149,63 +147,45 @@ The first two are captured groups while the final group is non-capturing, given 
 
 Bracket expressions define a set of characters that can be matched by a single pattern. They are similar to character classes but provide more flexibility in specifying the set of characters that will be matched.<br>
 
-Bracket expressions are denoted by enclosing a set of characters or character ranges within square brackets ([]).<br>
+Bracket expressions are denoted by enclosing a set of characters or character ranges within square brackets ([]). The characters include . (any character except newline characters), /d (any digit character (equivalent to [0-9])), /s (any whitespace character (spaces, tabs, newlines, etc.)), /w (any word character (letters, digits, and underscores)), ^ (**negates** the bracket expression, matching any character that is not in the set).<br>
 
- <!-- For example, the regular expression [abc] matches any one of the three characters "a", "b", or "c". -->
 
-You can also use character ranges within a bracket expression to match a range of characters. For example, the regular expression [a-z] matches any lowercase letter from "a" to "z", while the regular expression [A-Z] matches any uppercase letter from "A" to "Z".
+```
+[^<]
 
-In addition to specifying individual characters and ranges, bracket expressions also support a number of special characters that match particular sets of characters. Some of the most commonly used special characters include:
+```
 
-. - Matches any character except newline characters.
+This negates the < in the expression in our example Regex, looking for any other character<br>
 
-\d - Matches any digit character (equivalent to [0-9]).
-
-\s - Matches any whitespace character (spaces, tabs, newlines, etc.).
-
-\w - Matches any word character (letters, digits, and underscores).
-
-^ - Negates the bracket expression, matching any character that is not in the set.
-
-For example, the regular expression [^a-z\s] matches any character that is not a lowercase letter or whitespace character.
-
-Bracket expressions are a powerful tool for defining complex sets of characters to be matched by a regular expression.
 
 ### Greedy and Lazy Match
 
-In regular expressions, greedy and lazy matches refer to the behavior of quantifiers when used to match multiple occurrences of a pattern.
+Greedy and lazy matches are used to quantify the match to multiple occurrences of a pattern.<br>
 
-By default, quantifiers are greedy, meaning they match as many occurrences of the pattern as possible while still allowing the overall pattern to match. For example, the regular expression a.*b would match the entire string "aabcdb", because the .* quantifier matches the longest possible sequence of characters between the "a" and "b".
+By default, quantifiers are **greedy**, meaning they match as many occurrences of the pattern as possible.<br>
 
-Lazy matches, on the other hand, match as few occurrences of the pattern as possible while still allowing the overall pattern to match. Lazy matches are denoted by adding a question mark (?) after the quantifier. For example, the regular expression a.*?b would match only the substring "aab", because the .*? quantifier matches the shortest possible sequence of characters between the "a" and "b".
+Lazy matches match as few occurrences of the pattern as possible. They are marked by adding the (?) after the quantifier.<br>
 
-Lazy matches are useful when you want to match only the shortest possible substring that satisfies a pattern. They can also be used to avoid catastrophic backtracking, which can occur when a greedy quantifier causes the regular expression engine to explore a large number of possible matches before finding a successful match.
+```
+([^<]+)*
+```
+The greedy match in our regex matches zero or more characters that are not "<", followed by ****any number** of repetitions of this pattern.<br>
 
-In general, it's a good practice to use lazy matches only when you specifically need them, as they can be less efficient than greedy matches in some cases.
-
-
+Best practice is to use lazy matches only when you need them, as they are considered less efficient.<br>
 
 
 ### Boundaries
 
 Boundaries are special characters that match the position **between** characters, rather than the characters themselves. They allow you to specify where a match should occur in relation to other characters in the input string.<br>
 
-There types of boundaries in regular expressions are word boundaries (/b) and line boundaries (^ and $).
+There types of boundaries in regular expressions are word boundaries (/b) and line boundaries (^ and $).<br>
 
+```
+/^<([a-z]+)([^<]+)*(?:>(.*)<\/\1>|\s+\/>)$/
 
+```
 
-Word boundaries: \b
-Word boundaries match the position between a word character (as defined by the \w character class) and a non-word character. For example, the regular expression \bcat\b would match the word "cat" only when it appears on its own, and not as part of another word like "scattered" or "category".
-
-Line boundaries: ^ and $
-Line boundaries match the beginning (^) or end ($) of a line in the input string. For example, the regular expression ^hello would match the word "hello" only when it appears at the beginning of a line.
-
-Lookahead and lookbehind boundaries: (?=) and (?<=)
-Lookahead and lookbehind boundaries are used to specify a pattern that must occur immediately before ((?<=)) or after ((?=)) the current position, without including that pattern in the match itself. For example, the regular expression \d(?=px) would match any digit that is immediately followed by the characters "px", without including "px" in the match.
-
-Boundary characters are useful for creating more precise regular expressions that match specific patterns in the input string. By using boundaries, you can control where a match can occur in relation to other characters, and avoid matching unintended patterns that might be similar but not exactly what you're looking for.
-
-
+This expression makes use of both line boundaries, which match the beginning (^) or end ($) of a line in the input string. The expression we're looking at above begins with the ^ and ends with $ - The HTML tag starts with a < and ends with a >, which corresponds to our boundaries.<br>
 
 
 ### Back-references
@@ -217,12 +197,13 @@ A back slash is used here in the Regex example to refer back to the first "group
 ```
 <\/\1>
 ```
+<br>
 
 ### Look-ahead and Look-behind
 
 In regular expressions, look-ahead and look-behind allow you to match a pattern only if it is followed (look-ahead) or preceded (look-behind) by another pattern but **NOT** in that pattern in the match itself. You can recognize them by the (?=...) for positive look-ahead, (?!=...) for negative look-ahead, (?<=...) for positive look-behind, and (?<!...) for negative look-behind, whereas ... is the pattern to match.<br>
 
-This Regex doesn't make use of either look-ahead or look-behind.
+This Regex doesn't make use of either look-ahead or look-behind.<br>
 
 ## Author
 
