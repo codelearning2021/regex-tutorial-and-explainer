@@ -1,6 +1,6 @@
 # Regional Expression for HTML Tag Validation
 
-Introductory paragraph (replace this with your text)
+Gist for explaining the Email validation algorithm.
 
 ## Summary
 
